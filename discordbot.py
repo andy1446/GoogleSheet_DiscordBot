@@ -129,8 +129,6 @@ async def on_message(message):
                     return
  
 #Game
-@client.event
-async def on_message(message):
     if message.content.startswith("!play"): #the play command to start the guessing game.
         channel = message.channel
         await channel.send("Choose a number between 1-10. Enter numerical values only.") #message that tells about the start of the game
