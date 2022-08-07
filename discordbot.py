@@ -127,6 +127,27 @@ async def on_message(message):
                             index = random.randint(0, len(msgs)-1)
                             await message.channel.send(msgs[index].replace('<username>',username))
                     return
-    
+                  
+#Game
+async def on_message(message):
+    if message.content.startswith("!play"): #the play command to start the guessing game.
+        channel = message.channel
+        await channel.send("Choose a number between 1-10. Enter numerical values only.") #message that tells about the start of the game
+
+        # generates a random number and turns it into a string
+        number1 = random.randint(1,10)        
+        number2 = str(number1)
+
+        def check(m):
+            return m.content == number2 and m.channel == channel 
+        """
+          The check function, first it checks if the message is the correct number.
+          Then it checks if the channel is the same channel as the channel that the play command was sent in.
+          If both is true, then it returns true. Else it returns false.
+        """
+
+        msg = await client.wait_for('message', check=check) #waits for the check function to return true
+        await channel.send("Correct answer {.author}" .format(msg)) #sends the correct answer message    
+  
 # Bot起動
 client.run(TOKEN)
