@@ -130,34 +130,30 @@ async def on_message(message):
                   
 #Game
 @client.event
-async def on_message(message):
-    if message.content.startswith("!play"): #the play command to start the guessing game.
-        channel = message.channel
-        await channel.send("Choose a number between 1-10. Enter numerical values only.") #message that tells about the start of the game
+async def on_message(self, message):
+        # we do not want the bot to reply to itself
+        if message.author.id == self.user.id:
+            return
 
-        # generates a random number and turns it into a string
-        number1 = random.randint(1,10)        
-        number2 = str(number1)
+        if message.content.startswith('$guess'):
+            await message.channel.send('Guess a number between 1 and 10.')
 
-        def check(m):
-            return m.content == number2 and m.channel == channel 
-        """
-          The check function, first it checks if the message is the correct number.
-          Then it checks if the channel is the same channel as the channel that the play command was sent in.
-          If both is true, then it returns true. Else it returns false.
-        """
+            def is_correct(m):
+                return m.author == message.author and m.content.isdigit()
+
+            answer = random.randint(1, 10)
 
             try:
                 guess = await self.wait_for('message', check=is_correct, timeout=5.0)
             except asyncio.TimeoutError:
-                return await channel.send('Sorry, you took too long it was {}.'.format(answer))
+                return await message.channel.send('Sorry, you took too long it was {}.'.format(answer))
 
             if int(guess.content) == answer:
-                await channel.send('You are right!')
+                await message.channel.send('You are right!')
             else:
-                await channel.send('Oops. It is actually {}.'.format(answer))
-           
-    
+                await message.channel.send('Oops. It is actually {}.'.format(answer))
+
+              
   
 # Bot起動
 client.run(TOKEN)
