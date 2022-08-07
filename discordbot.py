@@ -149,6 +149,7 @@ async def on_message(message):
 
         msg = await client.wait_for('message', check=check) #waits for the check function to return true
         await channel.send("Correct answer {.author}" .format(msg)) #sends the correct answer message
+        return
               
   
 # Bot起動
