@@ -148,6 +148,29 @@ async def on_message(message):
         msg = await client.wait_for('message', check=check) #waits for the check function to return true
         await channel.send("Correct answer {.author}" .format(msg)) #sends the correct answer message
         return
+      
+#Game 2
+        # we do not want the bot to reply to itself
+        if message.author.id == self.user.id:
+            return
+
+        if message.content.startswith('$guess'):
+            await message.channel.send('Guess a number between 1 and 10.')
+
+            def is_correct(m):
+                return m.author == message.author and m.content.isdigit()
+
+            answer = random.randint(1, 10)
+
+            try:
+                guess = await self.wait_for('message', check=is_correct, timeout=5.0)
+            except asyncio.TimeoutError:
+                return await message.channel.send('Sorry, you took too long it was {}.'.format(answer))
+
+            if int(guess.content) == answer:
+                await message.channel.send('You are right!')
+            else:
+                await message.channel.send('Oops. It is actually {}.'.format(answer))
               
   
 # Bot起動
