@@ -147,8 +147,17 @@ async def on_message(message):
           If both is true, then it returns true. Else it returns false.
         """
 
-        msg = await client.wait_for('message', check=check) #waits for the check function to return true
-        await channel.send("Correct answer {.author}" .format(msg)) #sends the correct answer message    
+            try:
+                guess = await self.wait_for('message', check=is_correct, timeout=5.0)
+            except asyncio.TimeoutError:
+                return await channel.send('Sorry, you took too long it was {}.'.format(answer))
+
+            if int(guess.content) == answer:
+                await channel.send('You are right!')
+            else:
+                await channel.send('Oops. It is actually {}.'.format(answer))
+           
+    
   
 # Bot起動
 client.run(TOKEN)
