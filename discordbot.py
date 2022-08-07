@@ -129,6 +129,7 @@ async def on_message(message):
                     return
                   
 #Game
+@client.event
 async def on_message(message):
     if message.content.startswith("!play"): #the play command to start the guessing game.
         channel = message.channel
